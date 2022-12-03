@@ -1,6 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
+enum State
+{
+    Aiming
+}
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +14,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float ImpulseSpeed;
     private Rigidbody rb;
 
+    public UnityEvent StopArrow = new UnityEvent();
+
+    public UnityEvent FireBallNow = new UnityEvent();
 
     // Start is called before the first frame update
     void Start()
@@ -15,14 +24,11 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody>(); 
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ShootBallTowardsArrow()
     {
-        
-    }
-
-    private void AddImpulse()
-    {
-        rb.AddForce(ImpulseDirection * ImpulseSpeed, ForceMode.Impulse);
+        Debug.Log("called by input system");
+        // Logic on whether or not to fire the ball
+        StopArrow.Invoke();
+        FireBallNow.Invoke();
     }
 }
