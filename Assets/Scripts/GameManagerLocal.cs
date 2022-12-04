@@ -19,6 +19,7 @@ public class GameManagerLocal : MonoBehaviour
     public float TurnDuration = 3;
     public static float timeRemaining;
     public static int NextPlayerIndex = 0;
+    public static int numOfPlayersDone = 0;
     public int mode;
     int CurrentPlayerIndex
     {
