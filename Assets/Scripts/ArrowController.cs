@@ -14,36 +14,29 @@ public class ArrowController : MonoBehaviour
 
     private Coroutine rotateCo;
     private bool isCoRunning;
+    private bool canRotate = true;
 
-    private RotationEvent startRotation = new RotationEvent();
+    private RotationEvent StartRotationEvent = new RotationEvent();
     private float angleMultiplier = -1f;
 
-    private Vector3 StartOffset;
+    private Quaternion initialRotation;
     [SerializeField]private MeshRenderer meshRenderer;
 
+    public Quaternion centerRotation;
+
+    private float offsetInFront = 1f;
+    public float getOffset() { return offsetInFront; }
+    
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        StartOffset = transform.localPosition;
+        centerRotation = transform.rotation;
+        meshRenderer.enabled = false;
 
         // TODO: subscribe to event to start rotating
-        startRotation.AddListener(StartRotation);
-        startRotation.Invoke(timeToRotateCompletely/2f);
-    }
-
-    public void enableRotation()
-    {
-        transform.localPosition = StartOffset;
-        meshRenderer.enabled = false;
-    }
-
-    public void stopRotation()
-    {
-        meshRenderer.enabled = false;
-        if (isCoRunning)
-        {
-            StopCoroutine(rotateCo);
-        }
+        StartRotationEvent.AddListener(StartRotation);
+        //startRotation.Invoke(timeToRotateCompletely/2f);
     }
 
     public Vector3 getWorldSpaceDirection()
@@ -51,33 +44,60 @@ public class ArrowController : MonoBehaviour
         return transform.TransformDirection(Vector3.forward);
     }
 
+    private void SetPositionRelativeToBall()
+    {
+        transform.position = transformToRotateAround.position + new Vector3(0f, 0f, offsetInFront);
+        transform.rotation = initialRotation;
+    }
+
+    public void stopRotation()
+    {
+        meshRenderer.enabled = false;
+        canRotate = false;
+        if (isCoRunning)
+        {
+            StopCoroutine(rotateCo);
+        }
+    }
+
+    public void StartRotation()
+    {
+        canRotate = true;
+        //SetPositionRelativeToBall();
+        meshRenderer.enabled = true;
+        StartRotation(timeToRotateCompletely/2f);
+    }
+
     private void StartRotation(float secondsToRotate)
     {
+        if (!canRotate)
+            return;
+
         angleMultiplier *= -1f;
 
-        Quaternion currentRotation = transform.rotation;
+        Quaternion currentRotation = centerRotation;
 
-        // rotation needed to reach target;
-        //Quaternion aQuaternion = Quaternion.identity * Quaternion.Inverse(currentRotation);
-        //Quaternion bQuaternion = Quaternion.identity * Quaternion.Inverse(Quaternion.Euler(0, angleMultiplier * maxDegreeOffset, 0));
-        //Quaternion deltaQuaternion = bQuaternion * Quaternion.Inverse(aQuaternion);
 
-        Quaternion targetRotation = Quaternion.Euler(0, angleMultiplier * maxDegreeOffset, 0);
-        rotateCo = StartCoroutine(RotateUntil(targetRotation, angleMultiplier * Quaternion.Angle(targetRotation, currentRotation) / secondsToRotate, startRotation));
+        Quaternion targetRotation = currentRotation * Quaternion.Euler(0, angleMultiplier * maxDegreeOffset, 0);
+        Debug.Log("Target Rotation: " + targetRotation.eulerAngles);
+        Debug.Log("Current Rotation: " + currentRotation.eulerAngles);
+
+
+        rotateCo = StartCoroutine(RotateUntil(targetRotation, angleMultiplier * Quaternion.Angle(targetRotation, currentRotation) / secondsToRotate, StartRotationEvent));
     }
 
     private IEnumerator RotateUntil(Quaternion targetRotation, float degreesPerSecond, RotationEvent toInvoke)
     {
         isCoRunning = true;
 
-
-        while(Quaternion.Angle(targetRotation, transform.rotation) > 0.1f)
+        do
         {
             float degreesPerFrame = degreesPerSecond * Time.deltaTime;
 
             transform.RotateAround(transformToRotateAround.position, Vector3.up, degreesPerFrame);
             yield return null;
-        }
+        } while (Quaternion.Angle(targetRotation, transform.rotation) > 0.5f);
+        
 
         isCoRunning = false;
         toInvoke.Invoke(timeToRotateCompletely);

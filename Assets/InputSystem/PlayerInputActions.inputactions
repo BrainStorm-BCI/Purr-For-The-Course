@@ -20,7 +20,7 @@
                     "name": "",
                     "id": "8095b112-f3b6-42a0-ac6a-c2f9d967d431",
                     "path": "<Keyboard>/space",
-                    "interactions": "",
+                    "interactions": "Press(behavior=1)",
                     "processors": "",
                     "groups": "",
                     "action": "Shoot",

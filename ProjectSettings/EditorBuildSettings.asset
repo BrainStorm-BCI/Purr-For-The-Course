@@ -20,7 +20,10 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/BCI-Training/SSVEPtraining.unity
     guid: 9095b4ac84eabff4bbd78d8db3a1c32b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Testing-Gameplay-Networking.unity
     guid: a8dc783c33b572240b4efebc81cbcfa9
+  - enabled: 1
+    path: Assets/Scenes/Testing-Game Design Walt.unity
+    guid: 64bdf8c67606bdf498a068e7182bee8d
   m_configObjects: {}
