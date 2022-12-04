@@ -8,16 +8,22 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BCI-Training/P300Training.unity
     guid: d6b563a047e167c4bb53232e70fc9c47
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BCI-Training/GameJamDemo.unity
     guid: 03370cc5af6aa2046a8f2741967b1f44
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BCI-Training/MITraining.unity
     guid: 9fe2056da4f5fdb4794b47ac4c913cea
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/BCI-Training/SSVEPtraining.unity
     guid: 9095b4ac84eabff4bbd78d8db3a1c32b
+  - enabled: 0
+    path: Assets/Scenes/Testing-Gameplay-Networking.unity
+    guid: a8dc783c33b572240b4efebc81cbcfa9
+  - enabled: 1
+    path: Assets/Scenes/Testing-Game Design Walt.unity
+    guid: 64bdf8c67606bdf498a068e7182bee8d
   m_configObjects: {}
