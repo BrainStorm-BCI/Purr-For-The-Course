@@ -191,7 +191,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7909789547915751643}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5b8363339aa67224dacebf095af53323, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -206,8 +206,8 @@ Rigidbody:
   m_GameObject: {fileID: 7909789547915751643}
   serializedVersion: 2
   m_Mass: 1
-  m_Drag: 0.75
-  m_AngularDrag: 0.05
+  m_Drag: 0.3
+  m_AngularDrag: 0
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 1
@@ -226,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ImpulseSpeed: 60
-  vEpsilon: 0.1
+  vEpsilon: 0.5
   timeToQuicklySlowDown: 0.2
   arrowController: {fileID: 7909789548669290358}
 --- !u!1 &7909789548049306061
@@ -415,7 +415,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7909789548712821028}
-  m_LocalRotation: {x: 0.28978413, y: 0.000000016468093, z: -0.0000000049861373, w: 0.95709205}
+  m_LocalRotation: {x: 0.28978413, y: 0.000000016468094, z: -0.0000000049861377, w: 0.95709205}
   m_LocalPosition: {x: 0, y: 3, z: -4.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0

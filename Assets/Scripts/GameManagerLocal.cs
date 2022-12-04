@@ -155,6 +155,7 @@ public class GameManagerLocal : MonoBehaviour
             // Set the next player's turn
             if (players.Count == 1)
             {
+                players[0].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(false);
                 players[0].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(true);
                 transitionCamerasAfterTurnEnds(NextPlayerIndex);
             }

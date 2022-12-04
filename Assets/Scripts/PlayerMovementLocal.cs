@@ -69,7 +69,17 @@ namespace HelloWorld
         {
             isTurn.Value = p;
 
-
+            if (isTurn.Value)
+            {
+                wasBoolTrue = true;
+                playerController.onHitEvent.AddListener(onHitEventCalled);
+                playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
+                turnCo = StartCoroutine(playerController.GameLoopEnum());
+            }
+            else
+            {
+                playerController.StopDaCoroutines();
+            }
         }
 
      
@@ -77,6 +87,7 @@ namespace HelloWorld
         public bool getBoolTurn()
         {
             return isTurn.Value;
+
         }
 
        
@@ -87,6 +98,7 @@ namespace HelloWorld
         {
            
             SubmitPositionRequest(v);
+
             
         }
 
@@ -130,21 +142,21 @@ namespace HelloWorld
         void Update()
         {
             transform.position = Position.Value;
-            if (getBoolTurn() && !wasBoolTrue)
-            {
-                wasBoolTrue = true;
-                playerController.onHitEvent.AddListener(onHitEventCalled);
-                playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
-                turnCo = StartCoroutine(playerController.GameLoopEnum());
-                //SubmitPositionIncrementRequest();
-            }
+            //if (getBoolTurn() && !wasBoolTrue)
+            //{
+            //    wasBoolTrue = true;
+            //    playerController.onHitEvent.AddListener(onHitEventCalled);
+            //    playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
+            //    turnCo = StartCoroutine(playerController.GameLoopEnum());
+            //    //SubmitPositionIncrementRequest();
+            //}
 
-            if (!getBoolTurn() && wasBoolTrue)
-            {
-                playerController.StopDaCoroutines();
+            //if (!getBoolTurn() && wasBoolTrue)
+            //{
+            //    playerController.StopDaCoroutines();
 
-                wasBoolTrue = false;
-            }
+            //    wasBoolTrue = false;
+            //}
         }
     }
 }
