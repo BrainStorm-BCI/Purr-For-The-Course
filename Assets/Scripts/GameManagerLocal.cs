@@ -12,10 +12,12 @@ public class GameManagerLocal : MonoBehaviour
     public static int turnCounter = 0;
     public GameObject prefab;
 
+    public Transform TransformToLookAtAfterTurnEnds;
+
     float NextTurnTime;
     // The duration of each turn in turn-based mode
     public float TurnDuration = 3;
-    public float timeRemaining;
+    public static float timeRemaining;
     public static int NextPlayerIndex = 0;
     public int mode;
     int CurrentPlayerIndex
@@ -131,6 +133,7 @@ public class GameManagerLocal : MonoBehaviour
 
     public void transitionCamerasAfterTurnEnds(int pIndex)
     {
+        // TODO: change active virtual camera to new player
         Camera.main.GetComponent<Camera>().transform.LookAt(players[pIndex].transform);
 
     }
@@ -165,23 +168,35 @@ public class GameManagerLocal : MonoBehaviour
                 transitionCamerasAfterTurnEnds(NextPlayerIndex);
                 players[NextPlayerIndex].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(true);
                 
-
-                
-
-
-
             }
             // Set the next turn time and player index
             timeRemaining = TurnDuration;
+            
             NextPlayerIndex = (NextPlayerIndex + 1) % players.Count;
 
         }
+        else if (players[CurrentPlayerIndex].GetComponent<PlayerController>().getIsHit())
+        {
+            Debug.Log("Turn is running for player: " + CurrentPlayerIndex);
+        }
+
         else
         {
             timeRemaining -= Time.deltaTime;
+            Debug.Log("Time Remaining: " + timeRemaining);
         }
     }
 
+    public static void SetTimeRemainingZero()
+    {
+        timeRemaining = 0.0f;
+    }
+
+    public Transform getTransformToLookAtAfterTurnEnds()
+    {
+        // TODO: Get jazzes jizz
+        return TransformToLookAtAfterTurnEnds;
+    }
 
     // Update is called once per frame
     void Update()

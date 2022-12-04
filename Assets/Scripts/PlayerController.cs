@@ -35,12 +35,18 @@ public class PlayerController : MonoBehaviour
 
     private bool isBallDoneMoving;
 
+    public UnityEvent onHitEvent = new UnityEvent();
+    public UnityEvent onDoneTurnEvent = new UnityEvent();
+
+    private bool isTurnRunning = false;
+    private bool isHit = false;
+
     // Start is called before the first frame update
     void Start()
     {
 
         rb = GetComponent<Rigidbody>();
-        StartCoroutine(GameLoopEnum());
+        //StartCoroutine(GameLoopEnum());
     }
 
     public void SetupAiming()
@@ -86,47 +92,69 @@ public class PlayerController : MonoBehaviour
         isBallDoneMoving = true;
     }
 
-    private IEnumerator GameLoopEnum()
+    public bool getIsTurnRunning() { return isTurnRunning;  }
+
+    public bool getIsHit() { return isHit;  }
+
+    public void StopDaCoroutines()
     {
+        arrowController.stopRotation();
+        isIdle = false;
+        isTurnRunning = false;
+        FireCalled = false;
+        isHit = false;
+        cinemachineVirtualCamera.Priority = 0;
+
+        StopAllCoroutines();
+    }
+
+    public IEnumerator GameLoopEnum()
+    {
+        cinemachineVirtualCamera.Priority = 1;
+
+        isTurnRunning = true;
         // wait until fire is called
         isIdle = true;
 
-        while (isMyTurn)
+        SetupAiming();
+
+        isIdle = true;
+
+        while (!FireCalled)
+            yield return null;
+
+        FireCalled = false;
+
+        isIdle = false;
+        // stop the rotation
+        arrowController.stopRotation();
+
+        isHit = true;
+        ballController.startShoot();
+
+        onHitEvent.Invoke();
+
+        do
         {
-            SetupAiming();
+            yield return new WaitForEndOfFrame();
+        } while (!ballController.getIsCoRunning());
 
-            isIdle = true;
+        do
+        {
+            yield return new WaitForEndOfFrame();
+        } while (ballController.getIsCoRunning());
 
-            while (!FireCalled)
-                yield return null;
+        isHit = false;
+        cinemachineVirtualCamera.Priority = 0;
 
-            FireCalled = false;
+        GameManagerLocal game = FindObjectOfType<GameManagerLocal>();
+        RotateCameraToFacePosition(game.getTransformToLookAtAfterTurnEnds().position);
+        RotateArrowToFacePosition(game.getTransformToLookAtAfterTurnEnds().position);
 
-            isIdle = false;
-            // stop the rotation
-            arrowController.stopRotation();
+        onDoneTurnEvent.Invoke();
+        isTurnRunning = false;
 
-            Debug.Log("before");
-
-            ballController.startShoot();
-
-            do
-            {
-                Debug.Log("Not yet running");
-                yield return new WaitForEndOfFrame();
-            } while (!ballController.getIsCoRunning());
-
-            do
-            {
-                Debug.Log("running");
-                yield return new WaitForEndOfFrame();
-            } while (ballController.getIsCoRunning());
-
-            Debug.Log("after");
-
-            RotateCameraToFacePosition(transformToLookAt.position);
-            RotateArrowToFacePosition(transformToLookAt.position);
-        }
+        
     }
 
     void Update()

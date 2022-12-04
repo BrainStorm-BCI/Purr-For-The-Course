@@ -14,6 +14,10 @@ namespace HelloWorld
         public static int mode;
         public int uniqueID;
 
+        private bool wasBoolTrue = false;
+        private Coroutine turnCo;
+        [SerializeField] private PlayerController playerController;
+
 
 
         protected virtual void Awake()
@@ -99,15 +103,39 @@ namespace HelloWorld
         {
             return mode;
         }
+
+        private void onHitEventCalled()
+        {
+            // AHMEDDDDD
+            Debug.Log("Hit got callllleeeeddd");
+        }
+
+        private void onDoneEventCalled()
+        {
+            playerController.StopAllCoroutines();
+            GameManagerLocal.SetTimeRemainingZero();
+
+            Debug.Log("turn is done baybeeeee");
+        }
+
         void Update()
         {
-
             transform.position = Position.Value;
-            if (getBoolTurn())
+            if (getBoolTurn() && !wasBoolTrue)
             {
-                SubmitPositionIncrementRequest();
+                wasBoolTrue = true;
+                playerController.onHitEvent.AddListener(onHitEventCalled);
+                playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
+                turnCo = StartCoroutine(playerController.GameLoopEnum());
+                //SubmitPositionIncrementRequest();
             }
-            
+
+            if (!getBoolTurn() && wasBoolTrue)
+            {
+                playerController.StopDaCoroutines();
+
+                wasBoolTrue = false;
+            }
         }
     }
 }
