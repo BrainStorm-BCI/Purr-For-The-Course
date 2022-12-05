@@ -71,6 +71,7 @@ namespace HelloWorld
 
             if (isTurn.Value)
             {
+                turnCount += 1;
                 wasBoolTrue = true;
                 playerController.onHitEvent.AddListener(onHitEventCalled);
                 playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
@@ -88,6 +89,11 @@ namespace HelloWorld
         {
             return isTurn.Value;
 
+        }
+
+        public bool getIsInHole()
+        {
+            return isInHole;
         }
 
        
