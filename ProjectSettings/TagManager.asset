@@ -5,15 +5,19 @@ TagManager:
   serializedVersion: 2
   tags:
   - BCI
+  - SpeedBoost
+  - Rough
+  - Win
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - BackgroundNoLight
   - Water
   - UI
-  - 
-  - 
+  - Ball In Hole
+  - Hole Collider
   - 
   - 
   - 

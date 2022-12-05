@@ -15,10 +15,13 @@ namespace HelloWorld
         public int uniqueID;
         public int turnCount = 0;
         public bool isInHole = false;
+        public bool isOutOfBounds = false;
+        public Vector3 lastGoodPosition;
 
         private bool wasBoolTrue = false;
         private Coroutine turnCo;
         [SerializeField] private PlayerController playerController;
+        
 
 
 
@@ -69,14 +72,35 @@ namespace HelloWorld
         {
             isTurn.Value = p;
 
-
+            if (isTurn.Value)
+            {
+                lastGoodPosition = this.transform.position;
+                turnCount += 1;
+                wasBoolTrue = true;
+                playerController.onHitEvent.AddListener(onHitEventCalled);
+                playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
+                turnCo = StartCoroutine(playerController.GameLoopEnum());
+            }
+            else
+            {
+                playerController.StopDaCoroutines();
+                lastGoodPosition = this.transform.position;
+            }
         }
 
-     
+        
+
+
 
         public bool getBoolTurn()
         {
             return isTurn.Value;
+
+        }
+
+        public bool getIsInHole()
+        {
+            return isInHole;
         }
 
        
@@ -87,6 +111,7 @@ namespace HelloWorld
         {
            
             SubmitPositionRequest(v);
+
             
         }
 
@@ -104,6 +129,18 @@ namespace HelloWorld
         public int getTurnCount()
         {
             return turnCount;
+        }
+
+        public void onOutOfBoundsCalled()
+        {
+            transform.position = lastGoodPosition;
+            Position.Value = lastGoodPosition;
+            
+            isOutOfBounds = false;
+            SubmitTurnRequest(false);
+            Debug.Log("Outofboundsboi");
+       
+
         }
 
 
@@ -130,21 +167,22 @@ namespace HelloWorld
         void Update()
         {
             transform.position = Position.Value;
-            if (getBoolTurn() && !wasBoolTrue)
-            {
-                wasBoolTrue = true;
-                playerController.onHitEvent.AddListener(onHitEventCalled);
-                playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
-                turnCo = StartCoroutine(playerController.GameLoopEnum());
-                //SubmitPositionIncrementRequest();
-            }
+          
+            //if (getBoolTurn() && !wasBoolTrue)
+            //{
+            //    wasBoolTrue = true;
+            //    playerController.onHitEvent.AddListener(onHitEventCalled);
+            //    playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
+            //    turnCo = StartCoroutine(playerController.GameLoopEnum());
+            //    //SubmitPositionIncrementRequest();
+            //}
 
-            if (!getBoolTurn() && wasBoolTrue)
-            {
-                playerController.StopDaCoroutines();
+            //if (!getBoolTurn() && wasBoolTrue)
+            //{
+            //    playerController.StopDaCoroutines();
 
-                wasBoolTrue = false;
-            }
+            //    wasBoolTrue = false;
+            //}
         }
     }
 }

@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     private bool isTurnRunning = false;
     private bool isHit = false;
 
+
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -104,12 +107,16 @@ public class PlayerController : MonoBehaviour
         FireCalled = false;
         isHit = false;
         cinemachineVirtualCamera.Priority = 0;
+        ballController.StopAllCoroutines();
 
         StopAllCoroutines();
     }
 
     public IEnumerator GameLoopEnum()
     {
+        GameManagerLocal game = FindObjectOfType<GameManagerLocal>();
+        RotateCameraToFacePosition(game.getTransformToLookAtAfterTurnEnds().position);
+
         cinemachineVirtualCamera.Priority = 1;
 
         isTurnRunning = true;
@@ -120,14 +127,23 @@ public class PlayerController : MonoBehaviour
 
         isIdle = true;
 
+        // wait for rotation to be done
         while (!FireCalled)
             yield return null;
 
-        FireCalled = false;
-
-        isIdle = false;
         // stop the rotation
         arrowController.stopRotation();
+        FireCalled = false;
+
+        arrowController.StartChooseVelocity();
+
+        // wait for aiming to be done
+        while (!FireCalled)
+            yield return null;
+
+        arrowController.StopChooseVelocity();
+        isIdle = false;
+        FireCalled = false;
 
         isHit = true;
         ballController.startShoot();
@@ -147,7 +163,7 @@ public class PlayerController : MonoBehaviour
         isHit = false;
         cinemachineVirtualCamera.Priority = 0;
 
-        GameManagerLocal game = FindObjectOfType<GameManagerLocal>();
+        
         RotateCameraToFacePosition(game.getTransformToLookAtAfterTurnEnds().position);
         RotateArrowToFacePosition(game.getTransformToLookAtAfterTurnEnds().position);
 

@@ -37,3 +37,4 @@ sysinfo.txt
 *.apk
 *.unitypackage
 *.log
+ProjectSettings/Packages/com.unity.probuilder/Settings.json
