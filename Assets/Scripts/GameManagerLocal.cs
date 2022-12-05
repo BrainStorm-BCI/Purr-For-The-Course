@@ -25,6 +25,12 @@ public class GameManagerLocal : MonoBehaviour
     public static int numOfPlayersDone = 0;
     public int mode;
     public int currentHole=1;
+    public float speedPerFrame = 0.2f;
+
+    public AudioSource mainAudioSource;
+    public AudioClip TitleScreenClip;
+    public AudioClip MainAmbientClip;
+
     int CurrentPlayerIndex
     {
         get
@@ -43,11 +49,15 @@ public class GameManagerLocal : MonoBehaviour
         cinemachineVirtualCamera = GameObject.Find("orbitingIntroCam").GetComponent<Cinemachine.CinemachineVirtualCamera>();
         cinemachineVirtualCamera.Priority = 10;
 
+        mainAudioSource.clip = TitleScreenClip;
+        mainAudioSource.loop = true;
+        mainAudioSource.Play();
+
     }
 
     public void updateCamPosition()
     {
-        cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTrackedDolly>().m_PathPosition += 0.001f;
+        cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTrackedDolly>().m_PathPosition += speedPerFrame * Time.deltaTime;
     }
     //Start with GUI options in loading screen
     void OnGUI()
@@ -226,6 +236,8 @@ public class GameManagerLocal : MonoBehaviour
         timeRemaining = 0;
         mode = 3;
 
+        mainAudioSource.clip = MainAmbientClip;
+        mainAudioSource.Play();
 
 
 
