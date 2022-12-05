@@ -19,6 +19,8 @@ public class GameManagerLocal : MonoBehaviour
     public float TurnDuration = 3;
     public static float timeRemaining;
     public static int NextPlayerIndex = 0;
+    public int gameWinnerIndex = -1;
+    public static int numOfPlayersDone = 0;
     public int mode;
     int CurrentPlayerIndex
     {
@@ -28,6 +30,8 @@ public class GameManagerLocal : MonoBehaviour
         }
     }
     public static List<GameObject> players = new List<GameObject>();
+    public static List<GameObject> playersOriginal = new List<GameObject>();
+
 
 
     private void Start()
@@ -52,10 +56,54 @@ public class GameManagerLocal : MonoBehaviour
 
             GUILayout.EndArea();
         }
+        if(mode == 4)
+        {
+            GUILayout.BeginArea(new Rect(10, 10, 300, 300));
+            levelDoneGUI();
+            GUILayout.EndArea();
+
+        }
 
 
     }
 
+
+    public void levelDoneGUI()
+    {
+
+        if(gameWinnerIndex != -1) //if this was set (ie multiplayer version)
+        {
+            GUILayout.Label("Player " + gameWinnerIndex + " Won!");
+        }
+
+        int i = 1;
+        foreach (GameObject p in playersOriginal)
+        {
+            GUILayout.Label("Player " +  i + " took  " + p.GetComponent<PlayerMovementLocal>().getTurnCount() + " turns!");
+            i += 1;
+        }
+
+        if (GUILayout.Button("Add a player!"))
+        {
+            GameObject p = Instantiate(prefab, new Vector3(players.Count * 4, 0, 0), Quaternion.identity);
+            players.Add(p);
+            playersOriginal.Add(p);
+
+        }
+        if (GUILayout.Button("Play Again?"))
+        {
+            players.Clear();
+            foreach (GameObject p in playersOriginal)
+            {
+                //TODO: Maybe call a func within playerMovement that cleans up everything
+                players.Add(p);
+            }
+                mode = 2;
+
+        }
+
+
+    }
 
 
     static void StatusLabels()
@@ -85,6 +133,7 @@ public class GameManagerLocal : MonoBehaviour
         {
             GameObject p = Instantiate(prefab, new Vector3(players.Count*4, 0, 0), Quaternion.identity);
             players.Add(p);
+            playersOriginal.Add(p);
 
         }
         if (GUILayout.Button("Start Game!"))
@@ -103,9 +152,10 @@ public class GameManagerLocal : MonoBehaviour
 
         //placing
         int i = 0;
+        gameWinnerIndex = -1;
         Vector3 p1Pos = new Vector3(0, 0f, 0f);
 
-        foreach (GameObject p in players)
+        foreach (GameObject p in playersOriginal)
         {
             p.GetComponent<PlayerMovementLocal>().MoveAbsolute(new Vector3(i, 0f, 0f));
 
@@ -122,7 +172,7 @@ public class GameManagerLocal : MonoBehaviour
 
         // Set the next turn time and player index
         NextTurnTime = Time.time + TurnDuration;
-        timeRemaining = TurnDuration;
+        timeRemaining = 0;
         mode = 3;
 
 
@@ -138,7 +188,10 @@ public class GameManagerLocal : MonoBehaviour
 
     }
 
+    public void levelDone()
+    {
 
+    }
     public void gameLoop()
     {
 
@@ -146,17 +199,23 @@ public class GameManagerLocal : MonoBehaviour
 
         if (timeRemaining <= 0)
         {
-
-         
-
             turnCounter += 1;
             // It is time to switch turns
             // Set the next player's turn
             if (players.Count == 1)
             {
                 players[0].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(false);
-                players[0].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(true);
-                transitionCamerasAfterTurnEnds(NextPlayerIndex);
+                if (players[0].GetComponent<PlayerMovementLocal>().getIsInHole())
+                {
+                    //last player finally got it in!
+                    mode = 4;
+                }
+                else
+                {
+                    players[0].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(true);
+                    transitionCamerasAfterTurnEnds(NextPlayerIndex);
+                }
+              
             }
             else
             {
@@ -164,7 +223,21 @@ public class GameManagerLocal : MonoBehaviour
 
                 // Set the current player's turn to false
                 players[CurrentPlayerIndex].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(false);
-
+                if(players[CurrentPlayerIndex].GetComponent<PlayerMovementLocal>().getIsInHole())
+                { //take care, someone just got it in! 
+                    if(gameWinnerIndex == -1)
+                    {
+                        gameWinnerIndex = CurrentPlayerIndex + 1;
+                    }
+                    players.RemoveAt(CurrentPlayerIndex);
+                    if(NextPlayerIndex >=1)
+                    {
+                        //Subtract to make up for lost element
+                        NextPlayerIndex -= 1;
+                    }
+                   
+                   
+                }
 
                 transitionCamerasAfterTurnEnds(NextPlayerIndex);
                 players[NextPlayerIndex].GetComponent<PlayerMovementLocal>().SubmitTurnRequest(true);
@@ -178,12 +251,14 @@ public class GameManagerLocal : MonoBehaviour
         }
         else if (players[CurrentPlayerIndex].GetComponent<PlayerController>().getIsHit())
         {
-            Debug.Log("Turn is running for player: " + CurrentPlayerIndex);
+            Debug.Log("Player is hitting the ball: " + CurrentPlayerIndex);
         }
-
         else
         {
-            timeRemaining -= Time.deltaTime;
+            if(players.Count != 1)
+            {//dont give time limit if only 1 player!
+                timeRemaining -= Time.deltaTime;
+            }
             Debug.Log("Time Remaining: " + timeRemaining);
         }
     }
@@ -212,6 +287,12 @@ public class GameManagerLocal : MonoBehaviour
         {
             //Play the game!
             gameLoop();
+        }
+
+        if(mode ==4 )
+        {
+            //Game has finished!
+            levelDone();
         }
         
     }
