@@ -10,7 +10,11 @@ public class OnEventPlayRoundRobin : MonoBehaviour
 
     public void RoundRobinPlaySound()
     {
+        if (_clips[index] == null)
+            Debug.Log("This clip is null");
         _audioSource.PlayOneShot(_clips[index]);
+
+        Debug.Log("I'm playing sound rn");
 
         index = (index + 1) % _clips.Count;
     }

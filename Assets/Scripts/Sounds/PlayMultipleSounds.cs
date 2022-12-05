@@ -7,7 +7,7 @@ public class PlayMultipleSounds : MonoBehaviour
     [SerializeField] private List<AudioSource> _audioSource;
     [SerializeField] private float volume = 1.0f;
 
-    private float time = 0.25f;
+    private float time = 0.5f;
 
 
     public void PlayAllSounds()
