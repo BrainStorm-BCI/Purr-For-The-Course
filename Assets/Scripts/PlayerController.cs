@@ -107,6 +107,7 @@ public class PlayerController : MonoBehaviour
         FireCalled = false;
         isHit = false;
         cinemachineVirtualCamera.Priority = 0;
+        ballController.StopAllCoroutines();
 
         StopAllCoroutines();
     }

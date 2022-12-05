@@ -22,6 +22,7 @@ public class GameManagerLocal : MonoBehaviour
     public int gameWinnerIndex = -1;
     public static int numOfPlayersDone = 0;
     public int mode;
+    public int currentHole=1;
     int CurrentPlayerIndex
     {
         get
@@ -99,6 +100,20 @@ public class GameManagerLocal : MonoBehaviour
                 mode = 2;
 
         }
+
+        if (GUILayout.Button("Play Next Hole"))
+        {
+            players.Clear();
+            foreach (GameObject p in playersOriginal)
+            {
+                //TODO: Maybe call a func within playerMovement that cleans up everything
+                players.Add(p);
+            }
+            currentHole += 1;
+            mode = 2;
+
+        }
+
 
 
     }

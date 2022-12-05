@@ -36,6 +36,7 @@ public class BallContoller : MonoBehaviour
         co = StartCoroutine(ShootBallForward());
     }
 
+
     public IEnumerator ShootBallForward()
     {
         Vector3 direction = arrowController.getWorldSpaceDirection();
@@ -137,6 +138,15 @@ public class BallContoller : MonoBehaviour
         if (other.gameObject.tag == "Win")
         {
             playerMovementLocal.isInHole = true;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.tag == "GameBounds")
+        {
+            Debug.Log("hell");
+            playerMovementLocal.onOutOfBoundsCalled();
         }
     }
 
