@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     private bool isTurnRunning = false;
     private bool isHit = false;
 
+
+    
+
     // Start is called before the first frame update
     void Start()
     {

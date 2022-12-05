@@ -50,4 +50,49 @@ public class BallContoller : MonoBehaviour
         rb.angularVelocity = Vector3.zero;
         isCoRunning = false;
     }
+
+   
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (other.gameObject.tag == "SpeedBoost")
+        {
+            Debug.Log("Its a speeeed!");
+            speedUp(other.transform.forward, 20);
+        }
+
+        if (other.gameObject.tag == "Rough")
+        {
+            Debug.Log("Its a rough!");
+           
+            slowDown(70);
+        }
+
+    }
+
+    public void speedUp(Vector3 direction,int speed)
+    {
+        rb.AddForce(direction*speed,ForceMode.Impulse);
+    }
+
+    public void slowDown(int speed)
+    {
+        Vector3 direction = Vector3.Normalize(this.transform.forward) * -1;
+        //Vector3 test = direction * speed + rb.velocity;
+        //if(test.x * rb.velocity.x <= 0 )
+        //{//different sign meaning we'd be changing the x direction if we use this change
+        //    test.x = 0;
+        //}
+        //if (test.y * rb.velocity.y <= 0)
+        //{//different sign meaning we'd be changing the x direction if we use this change
+        //    test.y = 0;
+        //}
+        //if (test.z * rb.velocity.z <= 0)
+        //{//different sign meaning we'd be changing the x direction if we use this change
+        //    test.z = 0;
+        //}
+        
+        //rb.velocity = test;
+        rb.AddForce(direction*speed, ForceMode.Acceleration);
+    }
 }

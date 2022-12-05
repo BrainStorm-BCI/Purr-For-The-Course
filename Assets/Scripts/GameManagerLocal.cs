@@ -251,7 +251,7 @@ public class GameManagerLocal : MonoBehaviour
         }
         else if (players[CurrentPlayerIndex].GetComponent<PlayerController>().getIsHit())
         {
-            Debug.Log("Player is hitting the ball: " + CurrentPlayerIndex);
+            //Debug.Log("Player is hitting the ball: " + CurrentPlayerIndex);
         }
         else
         {

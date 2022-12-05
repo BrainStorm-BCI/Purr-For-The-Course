@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - BCI
+  - SpeedBoost
+  - Rough
   layers:
   - Default
   - TransparentFX
