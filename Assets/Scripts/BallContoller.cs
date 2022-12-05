@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using System.Threading.Tasks;
 using HelloWorld;
+
+public class HitEvent : UnityEvent<float> { }
 
 public class BallContoller : MonoBehaviour
 {
@@ -19,6 +22,7 @@ public class BallContoller : MonoBehaviour
 
     private bool isCoRunning = false;
     private Coroutine co;
+    public HitEvent onPuttBallEvent = new HitEvent();
 
     private void Start()
     {
@@ -33,6 +37,7 @@ public class BallContoller : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         isCoRunning = true;
+        
         co = StartCoroutine(ShootBallForward());
     }
 
@@ -41,6 +46,8 @@ public class BallContoller : MonoBehaviour
         Vector3 direction = arrowController.getWorldSpaceDirection();
         float percentage = arrowController.getForcePercentage();
         float impulseSpeed = (maxImpulseSpeed - minImpulseSpeed) * percentage + minImpulseSpeed;
+
+        onPuttBallEvent.Invoke(percentage);
 
         Debug.Log("Impulse speed: " + impulseSpeed);
         Debug.Log("impulse Percentage: " + percentage);

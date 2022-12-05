@@ -2,6 +2,7 @@ using HelloWorld;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManagerLocal : MonoBehaviour
 {
@@ -32,7 +33,7 @@ public class GameManagerLocal : MonoBehaviour
     public static List<GameObject> players = new List<GameObject>();
     public static List<GameObject> playersOriginal = new List<GameObject>();
 
-
+    public UnityEvent ButtonClicked = new UnityEvent();
 
     private void Start()
     {
@@ -86,6 +87,7 @@ public class GameManagerLocal : MonoBehaviour
             GameObject p = Instantiate(prefab, new Vector3(players.Count * 4, 0, 0), Quaternion.identity);
             players.Add(p);
             playersOriginal.Add(p);
+            ButtonClicked.Invoke();
 
         }
         if (GUILayout.Button("Play Again?"))
@@ -97,6 +99,7 @@ public class GameManagerLocal : MonoBehaviour
                 players.Add(p);
             }
                 mode = 2;
+            ButtonClicked.Invoke();
 
         }
 
@@ -132,12 +135,13 @@ public class GameManagerLocal : MonoBehaviour
             GameObject p = Instantiate(prefab, new Vector3(players.Count*4, 0, 0), Quaternion.identity);
             players.Add(p);
             playersOriginal.Add(p);
+            ButtonClicked.Invoke();
 
         }
         if (GUILayout.Button("Start Game!"))
         {
             mode = 2;
-
+            ButtonClicked.Invoke();
         }
 
 
