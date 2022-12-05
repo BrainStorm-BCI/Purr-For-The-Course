@@ -12,7 +12,7 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - BackgroundNoLight
   - Water
   - UI
   - Ball In Hole
