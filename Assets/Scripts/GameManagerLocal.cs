@@ -14,6 +14,7 @@ public class GameManagerLocal : MonoBehaviour
     public GameObject prefab;
 
     public Transform TransformToLookAtAfterTurnEnds;
+    Cinemachine.CinemachineVirtualCamera cinemachineVirtualCamera;
 
     float NextTurnTime;
     // The duration of each turn in turn-based mode
