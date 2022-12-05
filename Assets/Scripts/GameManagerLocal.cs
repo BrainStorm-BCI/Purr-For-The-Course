@@ -40,8 +40,15 @@ public class GameManagerLocal : MonoBehaviour
     private void Start()
     {
         mode = 1;
+        cinemachineVirtualCamera = GameObject.Find("orbitingIntroCam").GetComponent<Cinemachine.CinemachineVirtualCamera>();
+        cinemachineVirtualCamera.Priority = 10;
+
     }
 
+    public void updateCamPosition()
+    {
+        cinemachineVirtualCamera.GetCinemachineComponent<Cinemachine.CinemachineTrackedDolly>().m_PathPosition += 0.001f;
+    }
     //Start with GUI options in loading screen
     void OnGUI()
     {
@@ -186,8 +193,9 @@ public class GameManagerLocal : MonoBehaviour
     public void initialPositions()
     {
         //Just place em a bit apart for now and get the cameras going.
-
         //placing
+        cinemachineVirtualCamera.Priority = 0;
+
         int i = 0;
         gameWinnerIndex = -1;
         System.String temp2 = "Course" + currentHole;
@@ -205,7 +213,7 @@ public class GameManagerLocal : MonoBehaviour
 
 
             //updateCamera(p.gameObject);
-            i += 3;
+            i += 2;
 
         }
 
@@ -320,8 +328,13 @@ public class GameManagerLocal : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (mode ==1)
+        {
+            updateCamPosition();
+        }
         if (mode == 2)
         {
+
             //setup players
             initialPositions();
         }
