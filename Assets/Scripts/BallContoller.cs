@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 
 public class BallContoller : MonoBehaviour
 {
-    [SerializeField] private float ImpulseSpeed = 3;
+    [SerializeField] private float maxImpulseSpeed = 60.0f;
+    [SerializeField] private float minImpulseSpeed = 1.0f;
     private Rigidbody rb;
     [SerializeField] private float vEpsilon = 0.1f;
     [SerializeField] private float timeToQuicklySlowDown = 0.2f;
@@ -33,7 +34,15 @@ public class BallContoller : MonoBehaviour
     public IEnumerator ShootBallForward()
     {
         Vector3 direction = arrowController.getWorldSpaceDirection();
-        rb.AddForce(direction * ImpulseSpeed, ForceMode.Impulse);
+        float percentage = arrowController.getForcePercentage();
+        float impulseSpeed = (maxImpulseSpeed - minImpulseSpeed) * percentage + minImpulseSpeed;
+
+        Debug.Log("Impulse speed: " + impulseSpeed);
+        Debug.Log("impulse Percentage: " + percentage);
+        Debug.Log("max Impulse speed: " + maxImpulseSpeed);
+        Debug.Log("min Impulse speed: " + minImpulseSpeed);
+
+        rb.AddForce(direction * impulseSpeed, ForceMode.Impulse);
 
         do
         {
