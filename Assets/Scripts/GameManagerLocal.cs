@@ -93,24 +93,43 @@ public class GameManagerLocal : MonoBehaviour
         }
         if (GUILayout.Button("Play Again?"))
         {
-            players.Clear();
-            foreach (GameObject p in playersOriginal)
+            int playerCount = playersOriginal.Count;
+            for (int j = 0; j < playersOriginal.Count; j++)
             {
-                //TODO: Maybe call a func within playerMovement that cleans up everything
-                players.Add(p);
+                Destroy(playersOriginal[j].gameObject);
             }
-                mode = 2;
-            ButtonClicked.Invoke();
+            players.Clear();
+            playersOriginal.Clear();
+            for (int j = 0; j < playerCount; j++)
+            {
+                GameObject p = Instantiate(prefab, new Vector3(players.Count * 4, 0, 0), Quaternion.identity);
+                players.Add(p);
+                playersOriginal.Add(p);
+                ButtonClicked.Invoke();
+            }
+            mode = 2;
 
         }
 
-        if (GUILayout.Button("Play Next Hole"))
+        if (GUILayout.Button("Play Next Hole!"))
         {
-            players.Clear();
-            foreach (GameObject p in playersOriginal)
+            int playerCount = playersOriginal.Count;
+            for (int j = 0; j < playersOriginal.Count; j++)
             {
-                //TODO: Maybe call a func within playerMovement that cleans up everything
+                Destroy(playersOriginal[j].gameObject);
+            }
+            players.Clear();
+            playersOriginal.Clear();
+            for (int j = 0; j < playerCount; j++)
+            {
+                GameObject p = Instantiate(prefab, new Vector3(players.Count * 4, 0, 0), Quaternion.identity);
                 players.Add(p);
+                playersOriginal.Add(p);
+                ButtonClicked.Invoke();
+            }
+            if ( currentHole == 5) 
+            {
+                currentHole = 0;
             }
             currentHole += 1;
             mode = 2;
@@ -170,11 +189,17 @@ public class GameManagerLocal : MonoBehaviour
         //placing
         int i = 0;
         gameWinnerIndex = -1;
-        Vector3 p1Pos = new Vector3(0, 0f, 0f);
+        System.String temp2 = "Course" + currentHole;
+        GameObject originalGameObject = GameObject.Find("Course" + currentHole);
+        TransformToLookAtAfterTurnEnds = GameObject.Find("Hole" + currentHole).transform;
+        Vector3 startPos = GameObject.Find("Course" + currentHole).transform.position;
+        Vector3 p1Pos = startPos;
 
         foreach (GameObject p in playersOriginal)
         {
-            p.GetComponent<PlayerMovementLocal>().MoveAbsolute(new Vector3(i, 0f, 0f));
+
+            Vector3 playerLoc = startPos + (new Vector3(i, 0f, 0f));
+            p.GetComponent<PlayerMovementLocal>().MoveAbsolute(playerLoc);
 
 
 
