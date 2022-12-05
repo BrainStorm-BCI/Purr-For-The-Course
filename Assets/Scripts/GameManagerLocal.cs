@@ -63,8 +63,6 @@ public class GameManagerLocal : MonoBehaviour
             GUILayout.EndArea();
 
         }
-
-
     }
 
 

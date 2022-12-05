@@ -31,7 +31,7 @@ public class ArrowController : MonoBehaviour
     private Vector3 initialScale;
 
     private Quaternion initialRotation;
-    [SerializeField]private MeshRenderer meshRenderer;
+    [SerializeField]private Renderer arrowRenderer;
 
     [HideInInspector] public Quaternion centerRotation;
 
@@ -43,7 +43,7 @@ public class ArrowController : MonoBehaviour
     void Awake()
     {
         centerRotation = transform.rotation;
-        meshRenderer.enabled = false;
+        arrowRenderer.enabled = false;
         initialScale = new Vector3(1.0f, 1.0f, minScale);
         transform.localScale = initialScale;
 
@@ -73,7 +73,7 @@ public class ArrowController : MonoBehaviour
     {
         canRotate = true;
         //SetPositionRelativeToBall();
-        meshRenderer.enabled = true;
+        arrowRenderer.enabled = true;
         StartRotation(timeToRotateCompletely/2f);
     }
 
@@ -120,7 +120,7 @@ public class ArrowController : MonoBehaviour
     public void StopChooseVelocity()
     {
         
-        meshRenderer.enabled = false;
+        arrowRenderer.enabled = false;
         initialScale = new Vector3(1.0f, 1.0f, minScale);
         transform.localScale = initialScale;
         StopAllCoroutines();
