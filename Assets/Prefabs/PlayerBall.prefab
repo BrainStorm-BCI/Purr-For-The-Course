@@ -131,7 +131,9 @@ MonoBehaviour:
   minImpulseSpeed: 5
   vEpsilon: 0.5
   timeToQuicklySlowDown: 0.2
+  playerMovementLocal: {fileID: 6309094923075376774}
   arrowController: {fileID: 7909789548669290358}
+  timeToRest: 1
 --- !u!1 &7909789548049306061
 GameObject:
   m_ObjectHideFlags: 0
