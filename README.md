@@ -1,12 +1,11 @@
-# BCIEssentials
-A Unity base environment for streamlined development of BCI applications.
+#Purr! For The Course
 
-Pairs nicely with [bci-essentials-python](https://github.com/kirtonBCIlab/bci-essentials-python)
+Made with love by: Walter Ostrander, Jaskirat Singh, McKenzie Andreakos, Karl Sharpe, Ahmed Ahmed
+Submitted to the BCI Gamejam 2022 (https://bci.games/) designed for use with a Motion-Imagery Brain-Computer-Interface. Players can also play with the spacebar.
 
-### Note - running on Apple silicon:
-To run on Apple silicon (ex: M1), the Lab Streaming Layer plugin library needs to be replaced:
 
-1. Download the latest [liblsl release](https://github.com/sccn/liblsl/releases) for MacOS (arm64)
+*********************************Gameplay instructions************************
+run the executable, have fun!
 
-2. Unzip the archive and copy the lib/*.dylib files into ./Assets/Plugins/lib
+can add multiple players, when all players finish a hole it goes to the next level. If not interested in playing the whole game goto Unity GameManagerLocal object in our Testing-Game-Design-Walt scene and change the currentHole to a num between 1-5 before clicking start game.
 
