@@ -15,10 +15,13 @@ namespace HelloWorld
         public int uniqueID;
         public int turnCount = 0;
         public bool isInHole = false;
+        public bool isOutOfBounds = false;
+        public Vector3 lastGoodPosition;
 
         private bool wasBoolTrue = false;
         private Coroutine turnCo;
         [SerializeField] private PlayerController playerController;
+        
 
 
 
@@ -71,6 +74,7 @@ namespace HelloWorld
 
             if (isTurn.Value)
             {
+                lastGoodPosition = this.transform.position;
                 turnCount += 1;
                 wasBoolTrue = true;
                 playerController.onHitEvent.AddListener(onHitEventCalled);
@@ -80,6 +84,7 @@ namespace HelloWorld
             else
             {
                 playerController.StopDaCoroutines();
+                lastGoodPosition = this.transform.position;
             }
         }
 
@@ -126,6 +131,18 @@ namespace HelloWorld
             return turnCount;
         }
 
+        public void onOutOfBoundsCalled()
+        {
+            transform.position = lastGoodPosition;
+            Position.Value = lastGoodPosition;
+            
+            isOutOfBounds = false;
+            SubmitTurnRequest(false);
+            Debug.Log("Outofboundsboi");
+       
+
+        }
+
 
 
         public int getMode()
@@ -150,6 +167,7 @@ namespace HelloWorld
         void Update()
         {
             transform.position = Position.Value;
+          
             //if (getBoolTurn() && !wasBoolTrue)
             //{
             //    wasBoolTrue = true;
