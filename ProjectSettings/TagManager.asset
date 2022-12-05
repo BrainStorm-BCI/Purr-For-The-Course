@@ -7,6 +7,7 @@ TagManager:
   - BCI
   - SpeedBoost
   - Rough
+  - Win
   layers:
   - Default
   - TransparentFX

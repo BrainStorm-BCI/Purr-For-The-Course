@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using HelloWorld;
 
 public class BallContoller : MonoBehaviour
 {
@@ -11,13 +12,17 @@ public class BallContoller : MonoBehaviour
     [SerializeField] private float vEpsilon = 0.1f;
     [SerializeField] private float timeToQuicklySlowDown = 0.2f;
 
+    [SerializeField] private PlayerMovementLocal playerMovementLocal;
+
     [SerializeField] private ArrowController arrowController;
+    [SerializeField] private float timeToRest = 4.0f;
 
     private bool isCoRunning = false;
     private Coroutine co;
 
     private void Start()
     {
+        timeToRest = 1.0f;
         rb = GetComponent<Rigidbody>();
     }
 
@@ -44,19 +49,66 @@ public class BallContoller : MonoBehaviour
 
         rb.AddForce(direction * impulseSpeed, ForceMode.Impulse);
 
-        do
-        {
-            yield return null;
-        } while (rb.velocity.magnitude < vEpsilon);
+
+
+        float t = 0.0f;
+        bool checkAgain = true;
 
         do
         {
-            yield return null;
-        } while (rb.velocity.magnitude > vEpsilon);
+            
+
+            do
+            {
+                yield return null;
+            } while (checkAgain && rb.velocity.magnitude < vEpsilon);
+
+
+
+            do
+            {
+                yield return null;
+            } while (rb.velocity.magnitude > vEpsilon);
+
+            
+
+            Debug.Log("before do while");
+
+            t = 0.0f;
+            do
+            {
+                Debug.Log("in do while");
+
+                t += Time.deltaTime;
+                yield return null;
+                
+                if (rb.velocity.magnitude > vEpsilon)
+                {
+                    t = 0.0f;
+                    Debug.Log("do while, magnitude: " + rb.velocity.magnitude);
+                    checkAgain = false;
+                    break;
+                }
+                    
+                if (t > timeToRest)
+                {
+                    Debug.Log("do while, time: " + t);
+                    break;
+                }
+
+                Debug.Log("right at end of do while");
+
+            } while (rb.velocity.magnitude <= vEpsilon);
+
+            Debug.Log("after do while");
+
+        } while (t < timeToRest);
+
 
         // slow down quickly
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+
         isCoRunning = false;
     }
 
@@ -77,6 +129,15 @@ public class BallContoller : MonoBehaviour
             slowDown(70);
         }
 
+        
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Win")
+        {
+            playerMovementLocal.isInHole = true;
+        }
     }
 
     public void speedUp(Vector3 direction,int speed)
