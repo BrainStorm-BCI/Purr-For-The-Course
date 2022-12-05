@@ -10,7 +10,6 @@ public class OnTriggerTagCallEvent : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         
-        Debug.Log("Ball collided with: " + other.tag);
         if (other.tag == "Wall")
         {
             TriggerTagEvent.Invoke();

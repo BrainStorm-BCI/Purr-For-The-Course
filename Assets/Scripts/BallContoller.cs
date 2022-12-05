@@ -127,7 +127,8 @@ public class BallContoller : MonoBehaviour
         if (other.gameObject.tag == "SpeedBoost")
         {
             Debug.Log("Its a speeeed!");
-            speedUp(other.transform.forward, 4);
+            
+            speedUp(other.transform.right, 4);
         }
 
         if (other.gameObject.tag == "Rough")
