@@ -2869,7 +2869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 7909789549137436545, guid: 353a7979912382c47b7e040d7aace5cc, type: 3}
   TransformToLookAtAfterTurnEnds: {fileID: 708692494}
-  TurnDuration: 3
+  TurnDuration: 50
   mode: 0
 --- !u!1 &1182982680
 GameObject:
