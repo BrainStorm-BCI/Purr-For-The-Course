@@ -13,6 +13,8 @@ namespace HelloWorld
         private NetworkVariable<bool> isTurn = new NetworkVariable<bool>(false);
         public static int mode;
         public int uniqueID;
+        public int turnCount = 0;
+        public bool isInHole = false;
 
         private bool wasBoolTrue = false;
         private Coroutine turnCo;
@@ -69,6 +71,7 @@ namespace HelloWorld
 
             if (isTurn.Value)
             {
+                turnCount += 1;
                 wasBoolTrue = true;
                 playerController.onHitEvent.AddListener(onHitEventCalled);
                 playerController.onDoneTurnEvent.AddListener(onDoneEventCalled);
@@ -80,12 +83,19 @@ namespace HelloWorld
             }
         }
 
-     
+        
+
+
 
         public bool getBoolTurn()
         {
             return isTurn.Value;
 
+        }
+
+        public bool getIsInHole()
+        {
+            return isInHole;
         }
 
        
@@ -110,6 +120,13 @@ namespace HelloWorld
         {
             return Position.Value;
         }
+
+        public int getTurnCount()
+        {
+            return turnCount;
+        }
+
+
 
         public int getMode()
         {

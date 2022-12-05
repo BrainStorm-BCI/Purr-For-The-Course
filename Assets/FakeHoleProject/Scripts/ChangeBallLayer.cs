@@ -8,8 +8,10 @@ public class ChangeBallLayer : MonoBehaviour {
 	
     void OnTriggerEnter(Collider other)
     {
+        Debug.Log("helloooo ");
         if(other.gameObject.tag == "Player")
         {
+            Debug.Log("helloooo ");
             other.gameObject.layer = LayerOnEnter;
         }
     }
