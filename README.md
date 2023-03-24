@@ -7,6 +7,9 @@ Submitted to the BCI Gamejam 2022 (https://bci.games/) designed for use with a M
 
 
 ## Gameplay instructions 
+
+Use Unity 2020.3.15f1, open the project and build for your system.
+
 run the executable, have fun!
 
 can add multiple players, when all players finish a hole it goes to the next level. If not interested in playing the whole game goto Unity GameManagerLocal object in our Testing-Game-Design-Walt scene and change the currentHole to a num between 1-5 before clicking start game.
